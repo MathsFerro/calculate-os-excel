@@ -16,16 +16,22 @@ public class HeaderCellGroup {
     private static final List<String> rowHeaderNames;
 
     static {
-        rowHeaderNames = List.of("DATA", "O.S.", "VALOR_TOTAL", "TIPO PGTO", "PARCELAS", "BANDEIRA", "TAXA", "VALOR A RECEBER");
+        rowHeaderNames = List.of("DATA", "O.S.", "VALOR TOTAL", "TIPO PGTO", "PARCELAS", "BANDEIRA", "TAXA", "VALOR A RECEBER",
+                "", "", "","BANDEIRA", "DEBITO", "1x", "2x a 6x", "7x a 12x");
     }
 
     public static void build(Workbook workbook, Row header) {
         CellStyle headerStyle = CellStyleUtils.buildDefaultHeaderStyle(workbook);
+
         CellFontUtils.buildDefaultHeaderFont(headerStyle, workbook);
+        CellStyleUtils.addMediumBorders(headerStyle);
 
         for(int x=0;x<rowHeaderNames.size();x++) {
             Cell headerCell = header.createCell(x);
-            headerCell.setCellValue(rowHeaderNames.get(x));
+            String cellValue = rowHeaderNames.get(x);
+            headerCell.setCellValue(cellValue);
+            if(cellValue.isBlank())
+                continue;
             headerCell.setCellStyle(headerStyle);
         }
     }
