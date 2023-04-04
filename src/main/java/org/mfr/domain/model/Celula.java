@@ -14,7 +14,7 @@ public class Celula {
     private static final BigDecimal CEM_PORCENTO = BigDecimal.valueOf(100);
 
     private Date data;
-    private Integer numeroOs;
+    private String numeroOs;
     private BigDecimal valorTotal;
     private TipoPagamento tipoPagamento;
     private Integer parcelas;

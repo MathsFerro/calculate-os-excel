@@ -25,7 +25,7 @@ public class ReadExcelUseCaseImpl implements ReadExcelUseCase {
 
             Celula celula = Celula.builder()
                     .data(nonNull(row.getCell(DATA_OS_CELL_NUM)) ? row.getCell(DATA_OS_CELL_NUM).getDateCellValue() : null)
-                    .numeroOs(nonNull(row.getCell(NUMERO_OS_CELL_NUM)) ? Double.valueOf(row.getCell(NUMERO_OS_CELL_NUM).getNumericCellValue()).intValue() : null)
+                    .numeroOs(nonNull(row.getCell(NUMERO_OS_CELL_NUM)) ? String.valueOf(row.getCell(NUMERO_OS_CELL_NUM)) : null)
                     .valorTotal(nonNull(row.getCell(VALOR_TOTAL_CELL_NUM)) ? BigDecimal.valueOf(row.getCell(VALOR_TOTAL_CELL_NUM).getNumericCellValue()) : null)
                     .tipoPagamento(nonNull(row.getCell(TIPO_PAGAMENTO_CELL_NUM)) ? TipoPagamento.getTipoPagamento(row.getCell(TIPO_PAGAMENTO_CELL_NUM).getStringCellValue()) : null)
                     .parcelas(nonNull(row.getCell(PARCELA_CELL_NUM)) ? Integer.parseInt(row.getCell(PARCELA_CELL_NUM).getStringCellValue()) : 0)

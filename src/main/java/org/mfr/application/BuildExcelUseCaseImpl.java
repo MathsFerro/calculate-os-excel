@@ -44,6 +44,7 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
         for(int i=0;i<FlagGroup.getFlags().size();i++) {
             Row row = nonNull(sheet.getRow(i+1)) ? sheet.getRow(i+1) : sheet.createRow(i+1);
             Flag flag = FlagGroup.getFlags().get(i);
+            row.setHeight((short) 500);
             this.buildCellsFlagInRow(workbook, flag, row);
         }
     }
@@ -58,10 +59,7 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
 
             switch (column) {
                 case 0 -> cell.setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(celula.getData()));
-                case 1 -> {
-                    style.setDataFormat((short) 1);
-                    cell.setCellValue(celula.getNumeroOs());
-                }
+                case 1 -> cell.setCellValue(celula.getNumeroOs().replace(".0", ""));
                 case 2 -> {
                     style.setDataFormat((short) 7);
                     cell.setCellValue(celula.getValorTotal().doubleValue());
