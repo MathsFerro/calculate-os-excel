@@ -15,44 +15,28 @@ import static org.mfr.commons.utils.NormalizeStringUtils.normalizeFirstDayOfMont
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtils {
-    public static String getFirstDayOfMonthName(Date date) {
-        LocalDate firstDayOfMonth = LocalDate.of(date.getYear(), date.getMonth(), date.getDate());
-        DayOfWeek dayOfWeek = firstDayOfMonth.getDayOfWeek();
+    public static String getFirstDayOfMonthName(LocalDate localDate) {
+        DayOfWeek dayOfWeek = localDate.getDayOfWeek();
         return normalizeFirstDayOfMonth(dayOfWeek);
     }
 
-    public static Integer getMaxDayOfMonthInNumber(Date date) {
-        LocalDate lastDayOfMonth = LocalDate.of(date.getYear(), date.getMonth(), date.getDate());
-        return lastDayOfMonth.lengthOfMonth();
+    public static Integer getMaxDayOfMonthInNumber(LocalDate localDate) {
+        return localDate.lengthOfMonth();
     }
 
-    public static int getMonthsDifference(Date dateMin, Date dateMax) {
-        Calendar calMin = Calendar.getInstance();
-        Calendar calMax = Calendar.getInstance();
-        calMin.setTime(dateMin);
-        calMax.setTime(dateMax);
-
-        int yearsDifference = calMax.get(Calendar.YEAR) - calMin.get(Calendar.YEAR);
-        int monthsDifference = calMax.get(Calendar.MONTH) - calMin.get(Calendar.MONTH);
-        return yearsDifference * 12 + monthsDifference;
-    }
-
-    public static Date addOneMonth(Date inputDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(inputDate);
-        calendar.add(Calendar.MONTH, 1);
-        return calendar.getTime();
+    public static long getMonthsDifference(LocalDate dateMin, LocalDate dateMax) {
+        return ChronoUnit.MONTHS.between(dateMin, dateMax);
     }
 
     public static void main(String[] args) {
-        Date dateMin = new Date(2023, 4, 1);
-        Date dateMax = new Date(2023, 11, 1);
+        LocalDate dateMin = LocalDate.of(2023, 4, 1);
+        LocalDate dateMax = LocalDate.of(2025, 9, 1);
 
         long differenceBetweenDates = getMonthsDifference(dateMin, dateMax);
 
         int m = 0;
 
-        Date actualDate = dateMin;
+        LocalDate actualDate = dateMin;
         while(m<differenceBetweenDates) {
             String dayName = DateUtils.getFirstDayOfMonthName(actualDate);
             Integer idDay = HeaderDaysNameCellGroup.getIdValueByDayName(dayName);
@@ -80,7 +64,10 @@ public class DateUtils {
 
             System.out.println("------------");
 
-            actualDate = addOneMonth(actualDate);
+            actualDate = actualDate.plusMonths(1);
+//            actualDate = addOneMonth(actualDate);
+//            if(actualDate.getMonth()==11)
+//                actualDate = addOneYear(actualDate);
         }
 
     }
