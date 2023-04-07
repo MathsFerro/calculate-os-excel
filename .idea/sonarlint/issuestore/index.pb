@@ -9,10 +9,6 @@ a
 1src/main/java/org/mfr/domain/usecase/UseCase.java,2\a\2a4718ae90b679fd1dae0aaa720d43ace862a98d
 o
 ?src/main/java/org/mfr/domain/usecase/GetExcelByPathUseCase.java,3\8\388a353776e91531d57ab0b21e5c62e771bc0e4c
-\
-,src/main/java/org/mfr/domain/model/Flag.java,0\d\0df660bbca253fa55c89b84c72ad63df261e60a2
-a
-1src/main/java/org/mfr/domain/model/FlagGroup.java,6\c\6c9c14f8eb366cd41e75eea5af7a065ddc8c4271
 f
 6src/main/java/org/mfr/commons/utils/CellSizeUtils.java,e\0\e0a7c056516f2aec212157106f06b46d1e8c65c1
 h

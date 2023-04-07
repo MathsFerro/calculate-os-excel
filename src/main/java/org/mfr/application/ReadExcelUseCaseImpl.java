@@ -13,6 +13,7 @@ import java.util.List;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.mfr.commons.utils.Constants.*;
+import static org.mfr.commons.utils.DateUtils.dateToLocalDate;
 
 public class ReadExcelUseCaseImpl implements ReadExcelUseCase {
     @Override
@@ -24,7 +25,7 @@ public class ReadExcelUseCaseImpl implements ReadExcelUseCase {
                 continue;
 
             Celula celula = Celula.builder()
-                    .data(nonNull(row.getCell(DATA_OS_CELL_NUM)) ? row.getCell(DATA_OS_CELL_NUM).getDateCellValue() : null)
+                    .data(nonNull(row.getCell(DATA_OS_CELL_NUM)) ? dateToLocalDate(row.getCell(DATA_OS_CELL_NUM).getDateCellValue()) : null)
                     .numeroOs(nonNull(row.getCell(NUMERO_OS_CELL_NUM)) ? String.valueOf(row.getCell(NUMERO_OS_CELL_NUM)) : null)
                     .valorTotal(nonNull(row.getCell(VALOR_TOTAL_CELL_NUM)) ? BigDecimal.valueOf(row.getCell(VALOR_TOTAL_CELL_NUM).getNumericCellValue()) : null)
                     .tipoPagamento(nonNull(row.getCell(TIPO_PAGAMENTO_CELL_NUM)) ? TipoPagamento.getTipoPagamento(row.getCell(TIPO_PAGAMENTO_CELL_NUM).getStringCellValue()) : null)

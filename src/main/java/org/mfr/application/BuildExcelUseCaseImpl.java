@@ -8,6 +8,9 @@ import org.mfr.domain.model.*;
 import org.mfr.domain.usecase.BuildExcelUseCase;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +66,7 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
             CellStyleUtils.addMediumBorders(style);
 
             switch (column) {
-                case 0 -> cell.setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(celula.getData()));
+                case 0 -> {}//cell.setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(celula.getData()));
                 case 1 -> cell.setCellValue(celula.getNumeroOs().replace(".0", ""));
                 case 2 -> {
                     style.setDataFormat((short) 7);
@@ -117,5 +120,15 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
 
             cell.setCellStyle(style);
         }
+    }
+
+    private LocalDate getMaxLocalDate(List<Celula> celulas) {
+        Comparator<Celula> dateComparator = Comparator.comparing(Celula::getDataUltimoPagamento);
+        return Collections.max(celulas, dateComparator).getDataUltimoPagamento();
+    }
+
+    private LocalDate getMinLocalDate(List<Celula> celulas) {
+        Comparator<Celula> dateComparator = Comparator.comparing(Celula::getDataUltimoPagamento);
+        return Collections.min(celulas, dateComparator).getData();
     }
 }
