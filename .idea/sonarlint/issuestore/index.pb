@@ -14,8 +14,6 @@ o
 a
 1src/main/java/org/mfr/domain/model/FlagGroup.java,6\c\6c9c14f8eb366cd41e75eea5af7a065ddc8c4271
 f
-6src/main/java/org/mfr/commons/utils/CellFontUtils.java,6\c\6ccab83d371a697e10cd9399b6ce63d49e8ebe98
-f
 6src/main/java/org/mfr/commons/utils/CellSizeUtils.java,e\0\e0a7c056516f2aec212157106f06b46d1e8c65c1
 h
 8src/main/java/org/mfr/domain/usecase/ProcessUseCase.java,5\d\5d57e7d7daf4dd8a0338bef5d15b7e9f945b8d4b

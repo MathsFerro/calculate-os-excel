@@ -3,13 +3,12 @@ package org.mfr.application;
 import org.apache.poi.ss.usermodel.*;
 import org.mfr.commons.utils.CellSizeUtils;
 import org.mfr.commons.utils.CellStyleUtils;
-import org.mfr.domain.model.Celula;
-import org.mfr.domain.model.Flag;
-import org.mfr.domain.model.FlagGroup;
-import org.mfr.domain.model.HeaderCellGroup;
+import org.mfr.commons.utils.DateUtils;
+import org.mfr.domain.model.*;
 import org.mfr.domain.usecase.BuildExcelUseCase;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
@@ -28,9 +27,13 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
 
         HeaderCellGroup.build(workbook, sheet.createRow(0));
 
-
         this.buildDefaultCells(sheet, workbook, celulas);
         this.buildFlagGroupCells(sheet, workbook);
+        this.buildCalendarOfFuturePayments();
+    }
+
+    public void buildCalendarOfFuturePayments() {
+
     }
 
     private void buildDefaultCells(Sheet sheet, Workbook workbook, List<Celula> celulas) {
