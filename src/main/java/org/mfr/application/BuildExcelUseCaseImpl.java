@@ -25,7 +25,9 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
     public void apply(Workbook workbook, List<Celula> celulas) {
         Sheet sheet = workbook.createSheet("OS");
         CellSizeUtils.buildColumnWidth(sheet, COLUMNS, COLUMNS_WIDTH);
+
         HeaderCellGroup.build(workbook, sheet.createRow(0));
+
 
         this.buildDefaultCells(sheet, workbook, celulas);
         this.buildFlagGroupCells(sheet, workbook);

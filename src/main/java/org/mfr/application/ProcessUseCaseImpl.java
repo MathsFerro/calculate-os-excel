@@ -19,7 +19,7 @@ public class ProcessUseCaseImpl implements ProcessUseCase {
     private final ExcelActionsPort excelActionsPort;
 
     public void apply() {
-        Sheet sheet = this.getExcelByPathUseCase.apply("/os.xlsx");
+        Sheet sheet = this.getExcelByPathUseCase.apply("/template-os.xlsx");
         List<Celula> celulas = this.readExcelUseCase.apply(sheet);
         final Workbook workbook = new XSSFWorkbook();
         this.calculateFeeUseCase.apply(celulas);
