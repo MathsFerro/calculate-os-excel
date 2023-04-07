@@ -30,6 +30,7 @@ public class Celula {
 
     public void calculateValorAReceber(Flag flag) {
         this.taxa = this.valorTotal.multiply(flag.getDebitPercentage()).divide(CEM_PORCENTO);
+
         if(TipoPagamento.DEB.equals(this.tipoPagamento)) {
             this.dataUltimoPagamento = this.data.plusDays(1);
         }
@@ -43,6 +44,8 @@ public class Celula {
         }
 
         this.valorAReceber = this.valorTotal.subtract(this.taxa);
+        this.valorParcelado = this.valorAReceber;
+
         if(nonNull(this.parcelas) && this.parcelas>0) {
             this.valorParcelado = this.valorAReceber.divide(BigDecimal.valueOf(this.parcelas), RoundingMode.HALF_UP);
             this.dataUltimoPagamento = this.data.plusMonths(this.parcelas);

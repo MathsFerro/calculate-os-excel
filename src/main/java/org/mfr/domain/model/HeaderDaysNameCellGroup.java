@@ -3,6 +3,7 @@ package org.mfr.domain.model;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,7 +22,8 @@ public class HeaderDaysNameCellGroup {
         );
     }
 
-    public static void build() {
+    public static List<String> getDaysNameOfWeek() {
+        return rowHeaderDaysName.values().stream().toList();
     }
 
     public static Integer getIdValueByDayName(String dayName) {

@@ -14,9 +14,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.DoubleStream;
 
-import static org.mfr.commons.utils.NormalizeStringUtils.normalizeFirstDayOfMonth;
+import static org.mfr.commons.utils.NormalizeStringUtils.normalize;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtils {
@@ -25,8 +24,8 @@ public class DateUtils {
     }
 
     public static String getFirstDayOfMonthName(LocalDate localDate) {
-        DayOfWeek dayOfWeek = localDate.getDayOfWeek();
-        return normalizeFirstDayOfMonth(dayOfWeek);
+        DayOfWeek dayOfWeek = localDate.withDayOfMonth(1).getDayOfWeek();
+        return normalize(dayOfWeek);
     }
 
     public static Integer getMaxDayOfMonthInNumber(LocalDate localDate) {

@@ -4,24 +4,27 @@ import org.apache.poi.ss.usermodel.*;
 import org.mfr.commons.utils.CellSizeUtils;
 import org.mfr.commons.utils.CellStyleUtils;
 import org.mfr.commons.utils.DateUtils;
+import org.mfr.commons.utils.NormalizeStringUtils;
 import org.mfr.domain.model.*;
 import org.mfr.domain.usecase.BuildExcelUseCase;
 
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
 import static org.mfr.commons.utils.CustomRoundingMode.decreaseScaleToTwoDecimalCases;
+import static org.mfr.commons.utils.DateUtils.getMonthsDifference;
 
 public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
     private static final int COLUMNS_WIDTH = 5000;
     private static final int COLUMNS = 7;
     private static final int COLUMNS_FLAG = 5;
     private static final int FLAG_COLUMN_STARTING_WITH = 11;
+    private int startRowCalendar;
 
     @Override
     public void apply(Workbook workbook, List<Celula> celulas) {
@@ -30,13 +33,91 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
 
         HeaderCellGroup.build(workbook, sheet.createRow(0));
 
+        this.startRowCalendar = celulas.size()+5;
+
         this.buildDefaultCells(sheet, workbook, celulas);
         this.buildFlagGroupCells(sheet, workbook);
-        this.buildCalendarOfFuturePayments();
+        this.buildCalendarOfFuturePayments(sheet, workbook, celulas);
     }
 
-    public void buildCalendarOfFuturePayments() {
+    public void buildCalendarOfFuturePayments(Sheet sheet, Workbook workbook, List<Celula> celulas) {
+        LocalDate dateMin = getMinLocalDate(celulas);
+        LocalDate dateMax = getMaxLocalDate(celulas);
 
+        int rowNum = startRowCalendar;
+        long differenceBetweenDatesInMonths = getMonthsDifference(dateMin, dateMax);
+
+        LocalDate actualDate = dateMin;
+
+        for(int m=0; m<differenceBetweenDatesInMonths; m++) {
+            String dayName = DateUtils.getFirstDayOfMonthName(actualDate);
+            Integer idValueDayName = HeaderDaysNameCellGroup.getIdValueByDayName(dayName);
+            int maxDayOfMonth = DateUtils.getMaxDayOfMonthInNumber(actualDate);
+
+            Row row = sheet.createRow(rowNum-2);
+            row.setHeight((short) 500);
+            String monthName = NormalizeStringUtils.normalize(actualDate.getMonth());
+            row.createCell(0).setCellValue(monthName + " " + actualDate.getYear());
+
+            row = sheet.createRow(rowNum-1);
+            for(int x=0; x<HeaderDaysNameCellGroup.getDaysNameOfWeek().size(); x++) {
+                CellStyle styleCell = workbook.createCellStyle();
+                CellStyleUtils.buildDefaultStyle(workbook, styleCell);
+                CellStyleUtils.addMediumBorders(styleCell);
+
+                row.setHeight((short) 500);
+                row.createCell(x).setCellValue(HeaderDaysNameCellGroup.getDaysNameOfWeek().get(x));
+            }
+
+            row = sheet.createRow(rowNum);
+            row.setHeight((short) 500);
+
+            int x = 0;
+            int column = 0;
+            int dayOfMonth = 1;
+
+            while(dayOfMonth<=maxDayOfMonth) {
+                if(x % 7 == 0 && x>0) {
+                    rowNum = rowNum+1;
+                    row = sheet.createRow(rowNum);
+                    row.setHeight((short) 500);
+                    column = 0;
+                }
+
+                Cell cell = row.createCell(column++);
+
+                if(x<idValueDayName) {
+                    cell.setCellValue("X");
+                    x++;
+                    continue;
+                }
+
+                CellStyle styleCell = workbook.createCellStyle();
+                CellStyleUtils.buildDefaultStyle(workbook, styleCell);
+                CellStyleUtils.addMediumBorders(styleCell);
+
+                int actualDay = dayOfMonth;
+                LocalDate finalActualDate = actualDate;
+                double totalValueDay = celulas.stream()
+                        .filter(celula -> {
+                            if(maxDayOfMonth==30 && actualDay==30 && celula.getDataUltimoPagamento().getDayOfMonth()==31)
+                                return true;
+
+                            return celula.getDataUltimoPagamento().getDayOfMonth()==actualDay;
+                        })
+                        .filter(celula -> celula.getDataUltimoPagamento().isAfter(finalActualDate))
+                        .mapToDouble(celula -> celula.getValorParcelado().doubleValue())
+                        .sum();
+
+                cell.setCellValue("Dia " + actualDay + " R$ " + decreaseScaleToTwoDecimalCases(BigDecimal.valueOf(totalValueDay)));
+
+                x++;
+                dayOfMonth++;
+            }
+
+            actualDate = actualDate.plusMonths(1);
+            rowNum+=6;
+        }
     }
 
     private void buildDefaultCells(Sheet sheet, Workbook workbook, List<Celula> celulas) {
@@ -66,7 +147,7 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
             CellStyleUtils.addMediumBorders(style);
 
             switch (column) {
-                case 0 -> {}//cell.setCellValue(new SimpleDateFormat("dd/MM/yyyy").format(celula.getData()));
+                case 0 -> cell.setCellValue(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(celula.getData()));
                 case 1 -> cell.setCellValue(celula.getNumeroOs().replace(".0", ""));
                 case 2 -> {
                     style.setDataFormat((short) 7);
@@ -128,7 +209,7 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
     }
 
     private LocalDate getMinLocalDate(List<Celula> celulas) {
-        Comparator<Celula> dateComparator = Comparator.comparing(Celula::getDataUltimoPagamento);
+        Comparator<Celula> dateComparator = Comparator.comparing(Celula::getData);
         return Collections.min(celulas, dateComparator).getData();
     }
 }
