@@ -8,7 +8,6 @@ import org.mfr.domain.model.*;
 import org.mfr.domain.usecase.BuildExcelUseCase;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,8 +52,7 @@ public class BuildExcelUseCaseImpl implements BuildExcelUseCase {
 
         int rowNum = startRowCalendar;
 
-        Period differenceBetweenDates = getDifferenceBetweenDates(dateMin, dateMax);
-        long differenceBetweenDatesInMonth = differenceBetweenDates.getMonths();
+        long differenceBetweenDatesInMonth = getDifferenceBetweenDates(dateMin, dateMax);
 
         dateMin = dateMin.withDayOfMonth(1);
         LocalDate currentDate = dateMin;

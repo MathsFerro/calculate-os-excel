@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.mfr.commons.utils.CellStyleUtils;
 import org.mfr.commons.utils.NormalizeStringUtils;
 
 import java.math.BigDecimal;
@@ -39,12 +38,13 @@ public class HeaderMonthsCellGroup {
         row.setRowStyle(monthStyle);
 
         cell.setCellValue(monthName + " " + currentDate.getYear() + " - R$ " + decreaseScaleToTwoDecimalCases(
-                BigDecimal.valueOf(calculateTotalValueInMonth(celulas, currentDate.getMonthValue()))));
+                BigDecimal.valueOf(calculateTotalValueInMonth(celulas, currentDate))));
     }
 
-    private static double calculateTotalValueInMonth(List<Celula> celulas, int month) {
+    private static double calculateTotalValueInMonth(List<Celula> celulas, LocalDate currentDate) {
         return celulas.stream()
-                .filter(celula -> celula.getDataProximoPagamento().getMonthValue()==month)
+                .filter(celula -> celula.getDataProximoPagamento().getMonthValue()==currentDate.getMonthValue()
+                        && celula.getDataProximoPagamento().getYear()==currentDate.getYear())
                 .mapToDouble(celula -> celula.getValorParcelado().doubleValue())
                 .sum();
     }

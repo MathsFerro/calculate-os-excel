@@ -4,8 +4,15 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mfr.domain.model.Celula;
 
-import java.time.*;
-import java.util.*;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 import static org.mfr.commons.utils.NormalizeStringUtils.normalize;
 
@@ -24,8 +31,8 @@ public class DateUtils {
         return localDate.lengthOfMonth();
     }
 
-    public static Period getDifferenceBetweenDates(LocalDate dateMin, LocalDate dateMax) {
-        return Period.between(dateMin, dateMax);
+    public static long getDifferenceBetweenDates(LocalDate dateMin, LocalDate dateMax) {
+        return ChronoUnit.MONTHS.between(dateMin, dateMax);
     }
 //
 //    public static void main(String[] args) {

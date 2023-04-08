@@ -54,7 +54,7 @@ public class CellsGroupCalendarExcel {
 
             CellStyle styleCell = buildDefaultCalendarStyle(workbook, totalValueInDay);
 
-            CellFontUtils.buildDefaultCellFont(styleCell, workbook);
+            CellFontUtils.buildDefaultCellFontWithValue(styleCell, workbook, totalValueInDay);
 
             cell.setCellStyle(styleCell);
 

@@ -3,6 +3,8 @@ package org.mfr.commons.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -24,6 +26,14 @@ public class CellFontUtils {
         font.setFontName(FONT);
         font.setFontHeightInPoints((short) FONT_SIZE);
         font.setBold(FONT_BOLD);
+        style.setFont(font);
+    }
+
+    public static void buildDefaultCellFontWithValue(CellStyle style, Workbook workbook, double value) {
+        XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+        font.setFontName(FONT);
+        font.setFontHeightInPoints((short) FONT_SIZE);
+        font.setBold(value > 0 ? Boolean.TRUE : FONT_BOLD);
         style.setFont(font);
     }
 }

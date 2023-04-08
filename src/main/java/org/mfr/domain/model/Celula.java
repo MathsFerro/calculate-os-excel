@@ -7,8 +7,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
-import static org.mfr.commons.utils.DateUtils.getDifferenceBetweenDates;
-
 @Getter
 @Builder
 @ToString
