@@ -2,7 +2,12 @@ package org.mfr.domain.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.mfr.commons.utils.CellStyleUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,8 +27,33 @@ public class HeaderDaysNameCellGroup {
         );
     }
 
+    public static void build(Sheet sheet, Workbook workbook, int rowNum) {
+        Row row = sheet.createRow(rowNum-1);
+        for(int j=0; j<HeaderDaysNameCellGroup.getDaysNameOfWeek().size(); j++) {
+            CellStyle styleCell = workbook.createCellStyle();
+            CellStyleUtils.buildDefaultStyle(workbook, styleCell);
+            CellStyleUtils.addMediumBorders(styleCell);
+
+            XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+            font.setFontName("Calibri");
+            font.setFontHeightInPoints((short) 14);
+            font.setBold(Boolean.TRUE);
+            styleCell.setFont(font);
+
+            row.setHeight((short) 500);
+
+            Cell cell = row.createCell(j);
+            cell.setCellStyle(styleCell);
+            cell.setCellValue(HeaderDaysNameCellGroup.getDaysNameOfWeek().get(j));
+        }
+    }
+
     public static List<String> getDaysNameOfWeek() {
-        return rowHeaderDaysName.values().stream().toList();
+        return rowHeaderDaysName.entrySet()
+                .stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .map(Map.Entry::getValue)
+                .toList();
     }
 
     public static Integer getIdValueByDayName(String dayName) {
