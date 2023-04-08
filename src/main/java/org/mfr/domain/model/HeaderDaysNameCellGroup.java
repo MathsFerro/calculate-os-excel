@@ -3,13 +3,18 @@ package org.mfr.domain.model;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.mfr.commons.utils.CellStyleUtils;
 
+import java.awt.Color;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import static org.mfr.commons.Constants.*;
+import static org.mfr.domain.model.RgbUtils.generateXSSFColor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderDaysNameCellGroup {
@@ -32,18 +37,24 @@ public class HeaderDaysNameCellGroup {
         for(int j=0; j<HeaderDaysNameCellGroup.getDaysNameOfWeek().size(); j++) {
             CellStyle styleCell = workbook.createCellStyle();
             CellStyleUtils.buildDefaultStyle(workbook, styleCell);
-            CellStyleUtils.addMediumBorders(styleCell);
 
             XSSFFont font = ((XSSFWorkbook) workbook).createFont();
-            font.setFontName("Calibri");
-            font.setFontHeightInPoints((short) 14);
-            font.setBold(Boolean.TRUE);
+            font.setFontName(DEFAULT_FONT);
+            font.setFontHeightInPoints((short) HEADER_CALENDAR_DAYS_WEEK_SIZE);
+            font.setBold(HEADER_CALENDAR_DAYS_WEEK_BOLD);
             styleCell.setFont(font);
 
-            row.setHeight((short) 500);
+            row.setHeight((short) HEADER_CALENDAR_DAYS_WEEK_HEIGHT);
+
+
+            XSSFColor xssfColor = generateXSSFColor(new Color(217, 225, 242));
+            styleCell.setFillForegroundColor(xssfColor);
+            styleCell.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             Cell cell = row.createCell(j);
+            CellStyleUtils.addMediumBorders(styleCell);
             cell.setCellStyle(styleCell);
+
             cell.setCellValue(HeaderDaysNameCellGroup.getDaysNameOfWeek().get(j));
         }
     }

@@ -12,14 +12,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ExcelActions implements ExcelActionsPort {
-//    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Override
     public Sheet getByPath(String path) {
         try(FileInputStream file = new FileInputStream(path); Workbook workbook = new XSSFWorkbook(file)) {
             return workbook.getSheetAt(0);
         } catch (Exception ex) {
-//            log.error("Falha ao buscar excel no path informado.", ex);
+            System.err.println("Falha ao buscar excel no path informado. " + ex);
             return null;
         }
     }
@@ -38,7 +36,7 @@ public class ExcelActions implements ExcelActionsPort {
             workbook.write(outputStream);
             workbook.close();
         } catch (Exception ex) {
-//            log.error("Falha ao gerar Excel", ex);
+            System.err.println("Falha ao gerar Excel. " + ex);
         }
     }
 }

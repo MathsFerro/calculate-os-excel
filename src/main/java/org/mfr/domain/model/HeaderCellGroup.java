@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.mfr.commons.Constants;
 import org.mfr.commons.utils.CellFontUtils;
 import org.mfr.commons.utils.CellStyleUtils;
 
@@ -23,8 +24,11 @@ public class HeaderCellGroup {
     public static void build(Workbook workbook, Row header) {
         CellStyle headerStyle = CellStyleUtils.buildDefaultHeaderStyle(workbook);
 
-        CellFontUtils.buildDefaultHeaderFont(headerStyle, workbook);
+        CellFontUtils.buildDefaultHeaderCellFont(headerStyle, workbook);
+        CellStyleUtils.buildDefaultHeaderStyle(workbook);
         CellStyleUtils.addMediumBorders(headerStyle);
+
+        header.setHeight((short) Constants.HEADER_HEIGHT);
 
         for(int x=0;x<rowHeaderNames.size();x++) {
             Cell headerCell = header.createCell(x);
