@@ -17,7 +17,7 @@ public class CalculateFeeUseCaseImpl implements CalculateFeeUseCase {
             if(isNull(flag))
                 continue;
 
-            celula.calculateValorAReceber(flag);
+            celula.calculateNextDatesAndValorAReceber(flag);
         }
     }
 }
